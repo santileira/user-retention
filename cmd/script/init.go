@@ -1,6 +1,6 @@
 package script
 
 const (
-	defaultLogLevel     = "debug"
-	defaultFilePath     = "./example.csv"
+	defaultLogLevel = "debug"
+	defaultFilePath = "./example.csv"
 )

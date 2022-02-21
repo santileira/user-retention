@@ -1,6 +1,6 @@
 package script
 
 type Options struct {
-	LogLevel     string
-	FilePath     string
+	LogLevel string
+	FilePath string
 }

@@ -1,3 +1,5 @@
 package validator
 
-type UserR
+type UserRetentionValidator interface {
+	ValidateInput(filePath string) error
+}

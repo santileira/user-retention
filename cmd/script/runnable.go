@@ -1,10 +1,12 @@
 package script
 
 import (
-	"fmt"
+	"github.com/santileira/user-retention/domain/userretention/calculator"
+	handler "github.com/santileira/user-retention/domain/userretention/handler"
+	validator "github.com/santileira/user-retention/domain/userretention/validator"
+	"github.com/santileira/user-retention/filereader"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/santileira/user-retention/calculator"
 )
 
 type Runnable struct{}
@@ -24,7 +26,7 @@ func (r *Runnable) Cmd() *cobra.Command {
 
 	cmd.Flags().StringVar(&options.LogLevel, "log-level", defaultLogLevel, "log leve to use")
 	cmd.Flags().StringVar(&options.FilePath, "file-path", defaultFilePath,
-		"file with the user activity for the application")
+		"file with the application's user activity")
 
 	cmd.Run = func(_ *cobra.Command, _ []string) {
 		r.configureLog(options.LogLevel)
@@ -34,13 +36,18 @@ func (r *Runnable) Cmd() *cobra.Command {
 }
 
 func (r *Runnable) calculateUserRetention(options *Options) {
-	userRetentionCalculator := calculator.NewUserRetentionCalculator(options.FilePath, 0)
-	result, err := userRetentionCalculator.Calculate()
+	userRetentionValidator := validator.NewUserRetentionValidatorImpl()
+	fileReader := filereader.NewFileReaderImpl()
+	userRetentionCalculator := calculator.NewUserRetentionCalculatorImpl()
+	userRetentionHandler := handler.NewUserRetentionHandler(userRetentionValidator, fileReader, userRetentionCalculator)
+
+	result, err := userRetentionHandler.HandleRequest(options.FilePath)
 	if err != nil {
-		panic(err)
+		logrus.Errorf("Error calculating the user retention, err: %s", err.Error())
+		return
 	}
 
-	fmt.Println(result)
+	logrus.Debugf("The result is: \n%s", result)
 }
 
 func (r *Runnable) configureLog(logLevel string) {
