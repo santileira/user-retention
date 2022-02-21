@@ -59,4 +59,4 @@ docker-run:
 	@echo "----------------------------------------------------------------"
 	@echo " ️🏃 Running in docker..."
 	@echo "----------------------------------------------------------------"
-	docker run -p 8080:8080 -it --rm user-retention
+	docker run -it --rm user-retention

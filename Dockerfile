@@ -15,7 +15,7 @@ COPY go.sum .
 
 RUN go mod download -x
 COPY . .
-COPY *.csv /go/bin
+COPY *.csv /go/bin/
 
 RUN go build -a -tags 'netgo osusergo' -o /go/bin/user-retention main.go
 
@@ -25,7 +25,7 @@ LABEL maintainer='Santiago Leira'
 
 FROM alpine
 COPY --from=builder go/bin/user-retention /usr/local/bin
-COPY --from=builder go/bin/*.csv /usr/local/bin
+COPY --from=builder go/bin/*.csv /usr/local/bin/
 
 WORKDIR usr/local/bin
 ENTRYPOINT [ "user-retention", "script" ]

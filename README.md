@@ -54,7 +54,7 @@ Example:
 or 
 
 ```
-docker run -p 8080:8080 -it --rm user-retention --file-path=./example2.csv
+docker run -it --rm user-retention --file-path=./example2.csv
 ```
 
 ## Future work
